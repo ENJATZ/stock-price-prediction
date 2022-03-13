@@ -16,14 +16,19 @@ import {faArrowLeft} from '@fortawesome/free-solid-svg-icons';
 import theme from '../../utils/theme';
 import data from './data.json';
 
-export const ViewChart = ({navigation}: any) => {
+export const ViewChart = ({navigation, route}: any) => {
+  console.log(route);
+  const data = route.params?.data;
   const {height, width} = Dimensions.get('screen');
-  const OxLabels = data.forecasts[0].map(x => {
+  const {predictData, yfData} = data;
+  const OxLabels = predictData.forecasts[0].map(x => {
     const date = new Date(x.date);
     return `${date.getDate()}`;
   });
-  const OyData = data.forecasts.map(forecast => forecast.map(x => x.value));
-  const realPrice = data.realPrice.map(x => x.Close);
+  const OyData = predictData.forecasts.map(forecast =>
+    forecast.map(x => x.value),
+  );
+  const realPrice = predictData.realPrice.map(x => x.Close);
   const chartData = {
     labels: OxLabels,
     datasets: [
@@ -56,13 +61,15 @@ export const ViewChart = ({navigation}: any) => {
         style={{display: 'flex', paddingTop: 50}}>
         <Block style={{paddingLeft: 10, paddingRight: 10}}>
           <Block>
-            <Text color="gray">Apple Inc. (NASDAQ)</Text>
+            <Text color="gray">
+              {yfData.longName} ({yfData.fullExchangeName})
+            </Text>
           </Block>
           <Block flex space="between" row>
             <Block>
               <Block flex row>
                 <Text size="30" style={{marginRight: 7}}>
-                  AAPL
+                  {yfData.symbol}
                 </Text>
                 <Block style={{marginTop: 4, marginRight: 3}}>
                   <Text size="10" color="#1E90FF">
@@ -75,9 +82,11 @@ export const ViewChart = ({navigation}: any) => {
               </Block>
             </Block>
             <Block>
-              <Text style={{textAlign: 'right'}}>$166.29</Text>
+              <Text style={{textAlign: 'right'}}>
+                ${yfData.regularMarketPrice}
+              </Text>
               <Text style={{textAlign: 'right'}} size="12">
-                market open
+                market {yfData.marketState.toLowerCase()}
               </Text>
             </Block>
           </Block>

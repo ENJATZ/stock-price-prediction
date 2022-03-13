@@ -1,10 +1,5 @@
-from flask_jsonpify import jsonpify
 from flask import Flask, request, make_response, render_template
 from flask_cors import CORS
-from yahoofinancials import YahooFinancials
-from flask import Flask
-import os
-import mpld3
 import yfinance as yf
 from pandas_datareader import data as pdr
 
@@ -14,7 +9,6 @@ import seaborn as sns
 import numpy as np
 import sys
 import warnings
-import argparse
 import tensorflow as tf
 from func.forecast import forecast
 import json
@@ -80,6 +74,7 @@ def return_response(response, status):
     response = make_response(response, status)
     response.mimetype = 'application/json'
     return response
+
 
 if __name__ == '__main__':
     app.run(host="127.0.0.1", port=5000)

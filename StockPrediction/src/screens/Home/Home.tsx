@@ -9,20 +9,22 @@ import theme from '../../utils/theme';
 import {AutocompleteDropdown} from 'react-native-autocomplete-dropdown';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {faXmark, faCircleDown} from '@fortawesome/free-solid-svg-icons';
-import {findSuggestions} from './HomeAPI';
+import {fetchData, findSuggestions} from './HomeAPI';
 import {SuggestionType, DataSetType} from '../../types';
 import Spinner from 'react-native-loading-spinner-overlay';
 import {ProgressBar} from '../../components/ProgressBar/ProgressBar';
+import {SCREEN} from '../../utils/definitions';
 
 export const Home = ({navigation}: any) => {
   const {t, i18n} = useTranslation();
   const {height, width} = Dimensions.get('screen');
   const [dataSet, setDataSet] = useState<DataSetType[] | undefined>(undefined);
   const dropdownController = useRef(null);
-  const countInterval = useRef<any>(null);
   const loaderValue = useRef(new Animated.Value(0)).current;
   const [suggestionsLoading, setSuggestionsLoading] = useState(false);
   const [loading, setLoading] = useState(0);
+  const [chartData, setChartData] = useState(undefined);
+  const countInterval = useRef<any>(null);
 
   const getSuggestions = useCallback(async input => {
     if (typeof input !== 'string' || input.length < 2) {
@@ -45,15 +47,13 @@ export const Home = ({navigation}: any) => {
   const handleItemSelection = (id: string) => {
     const symbol = dataSet && dataSet[parseInt(id)].title?.split(';')[0];
     if (symbol) {
-      console.log(symbol);
+      console.log('handleItemSelection called');
       setLoading(1);
-      countInterval.current = setInterval(
-        () => setLoading(old => old + 5),
-        300,
-      );
-      return () => {
-        clearInterval(countInterval!); //when user exits, clear this interval.
-      };
+      fetchData(symbol, (error, data) => {
+        if (data) {
+          setChartData(data);
+        }
+      });
     }
   };
   const load = (count: any) => {
@@ -64,10 +64,22 @@ export const Home = ({navigation}: any) => {
     }).start();
   };
   useEffect(() => {
-    load(loading);
-    if (loading >= 100) {
-      setLoading(100);
-      clearInterval(countInterval);
+    if (loading === 1) {
+      countInterval.current = setInterval(() => {
+        console.log('loading value', loading);
+        if (loading > 0 && loading < 100) {
+          setLoading(old => old + 5);
+        }
+      }, 400);
+    } else {
+      load(loading);
+      if (loading >= 100 && chartData) {
+        console.log('loading value', loading);
+        clearInterval(countInterval.current);
+        navigation.navigate(SCREEN.VIEWCHART, {data: chartData});
+        console.log('switching with data', chartData);
+        setLoading(0);
+      }
     }
   }, [loading]);
   // Loading handling
@@ -77,7 +89,7 @@ export const Home = ({navigation}: any) => {
     outputRange: ['0%', '100%'],
     extrapolate: 'clamp',
   });
-  if (loading > 0 && loading < 100) {
+  if (loading > 0) {
     return (
       <LinearGradient
         colors={[theme.COLORS.DARK1, theme.COLORS.DARK1]}
