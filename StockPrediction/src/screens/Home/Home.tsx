@@ -1,19 +1,16 @@
-import React, {useState, useRef, useCallback, useEffect} from 'react';
+import {Block} from 'galio-framework';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {useTranslation} from 'react-i18next';
-import {Dimensions, ScrollView, Image, Animated} from 'react-native';
-import {Button} from '../../components/Button/Button';
-import {Text} from '../../components/Text/Text';
-import {Block, Icon} from 'galio-framework';
-import LinearGradient from 'react-native-linear-gradient';
-import theme from '../../utils/theme';
+import {Animated, Dimensions, Image, ScrollView} from 'react-native';
 import {AutocompleteDropdown} from 'react-native-autocomplete-dropdown';
-import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
-import {faXmark, faCircleDown} from '@fortawesome/free-solid-svg-icons';
-import {fetchData, findSuggestions} from './HomeAPI';
-import {SuggestionType, DataSetType} from '../../types';
+import LinearGradient from 'react-native-linear-gradient';
 import Spinner from 'react-native-loading-spinner-overlay';
 import {ProgressBar} from '../../components/ProgressBar/ProgressBar';
+import {Text} from '../../components/Text/Text';
+import {DataSetType, SuggestionType} from '../../types';
 import {SCREEN} from '../../utils/definitions';
+import theme from '../../utils/theme';
+import {fetchData, findSuggestions} from './HomeAPI';
 
 export const Home = ({navigation}: any) => {
   const {t, i18n} = useTranslation();

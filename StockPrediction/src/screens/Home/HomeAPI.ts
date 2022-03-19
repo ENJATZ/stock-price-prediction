@@ -1,5 +1,5 @@
 import yahooFinance from 'yahoo-finance2';
-import {SuggestionType} from '../../types';
+import { SuggestionType } from '../../types';
 
 const apiURL = 'http://127.0.0.1:5000';
 
@@ -19,7 +19,7 @@ export const fetchData = async (
   callback: (error: any, data: any) => void,
 ) => {
   const period = '5d',
-    test_size = 10;
+    test_size = 20;
 
   const yfResponse = await yahooFinance.quote(symbol);
   const apiResponse = await fetch(
