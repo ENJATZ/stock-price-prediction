@@ -10,7 +10,8 @@ import {
 import { Text } from '../../components/Text/Text';
 import theme from '../../utils/theme';
 import { nFormatter } from '../../utils/helpers';
-import { GaugeIndicator } from '../../components/GaugeIndicator/GaugeIndicator';
+import { RatingIndicator } from '../../components/RatingIndicator/RatingIndicator';
+import * as S from './ViewChart.styles';
 
 export const ViewChart = ({ navigation, route }: any) => {
   console.log(route);
@@ -153,15 +154,29 @@ export const ViewChart = ({ navigation, route }: any) => {
               borderRadius: 5,
             }}
           />
-          <Text size="18">Summary</Text>
-          <Block
-            flex
-            row
-            space="between"
-            style={{ width: '100%', flexWrap: true }}>
-            {summaries.map((item: InlineSummaryType) => (
-              <InlineSummary name={item.name} value={item.value} />
-            ))}
+          <Block>
+            <S.InfoBlock>
+              <Text size="18" style={{ marginBottom: 10 }}>
+                Summary
+              </Text>
+              <Block
+                flex
+                row
+                space="between"
+                style={{ width: '100%', flexWrap: true }}>
+                {summaries.map((item: InlineSummaryType) => (
+                  <InlineSummary name={item.name} value={item.value} />
+                ))}
+              </Block>
+            </S.InfoBlock>
+            <S.InfoBlock>
+              <Text size="18" style={{ marginBottom: 10 }}>
+                Analysts rating
+              </Text>
+              <Block middle>
+                <RatingIndicator yfRating={yfData.averageAnalystRating} />
+              </Block>
+            </S.InfoBlock>
           </Block>
         </Block>
       </ScrollView>
