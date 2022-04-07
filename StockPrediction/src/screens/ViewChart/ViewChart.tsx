@@ -1,6 +1,6 @@
 import { Block } from 'galio-framework';
 import React from 'react';
-import { Dimensions, ScrollView } from 'react-native';
+import { Dimensions, Image, ScrollView } from 'react-native';
 import { LineChart } from 'react-native-chart-kit';
 import LinearGradient from 'react-native-linear-gradient';
 import {
@@ -18,6 +18,7 @@ export const ViewChart = ({ navigation, route }: any) => {
   const data = route.params?.data;
   const { height, width } = Dimensions.get('screen');
   const { predictData, yfData } = data;
+
   const OxLabels = predictData.forecasts[0].map((x: any) => {
     const date = new Date(x.date);
     return `${date.getDate()}`;
@@ -26,6 +27,7 @@ export const ViewChart = ({ navigation, route }: any) => {
     forecast.map((x: any) => x.value),
   );
   const realPrice = predictData.realPrice.map((x: any) => x.Close);
+
   const chartData = {
     labels: OxLabels,
     datasets: [
@@ -100,6 +102,14 @@ export const ViewChart = ({ navigation, route }: any) => {
           <Block flex space="between" row>
             <Block>
               <Block flex row>
+                <Image
+                  style={{ marginTop: 5, marginRight: 5 }}
+                  source={{
+                    uri: 'https://cdn-icons-png.flaticon.com/512/732/732221.png',
+                    width: 26,
+                    height: 26,
+                  }}
+                />
                 <Text size="30" style={{ marginRight: 7 }}>
                   {yfData.symbol}
                 </Text>
@@ -118,7 +128,10 @@ export const ViewChart = ({ navigation, route }: any) => {
                     color={
                       yfData.regularMarketChange < 0 ? '#ce4747' : '#1E90FF'
                     }>
-                    ${Math.abs(yfData.regularMarketChange)}
+                    $
+                    {Math.abs(
+                      parseFloat(yfData.regularMarketChange).toFixed(2),
+                    )}
                   </Text>
                 </Block>
               </Block>
