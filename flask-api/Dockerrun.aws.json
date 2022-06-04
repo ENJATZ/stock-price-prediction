@@ -1,0 +1,12 @@
+{
+  "AWSEBDockerrunVersion": "1",
+  "Image": {
+    "Name": "enjatz/spp-flask-api27",
+    "Update": "true"
+  },
+  "Ports": [
+    {
+      "ContainerPort": "8000"
+    }
+  ]
+}

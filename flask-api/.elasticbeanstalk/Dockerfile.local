@@ -1,0 +1,2 @@
+FROM enjatz/spp-flask-api27
+EXPOSE 8000
