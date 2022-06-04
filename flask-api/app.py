@@ -12,6 +12,7 @@ import warnings
 import tensorflow as tf
 from func.forecast import forecast
 import json
+import os
 
 if not sys.warnoptions:
     warnings.simplefilter('ignore')
@@ -26,6 +27,9 @@ app = Flask(__name__)
 CORS(app)
 simulations = 3
 
+@app.route('/')
+def index():
+    return 'hello'
 
 @app.route('/predict/<tickr>/<period>/<test_size>', methods=['GET'])
 def predict(tickr, period, test_size):
@@ -75,6 +79,6 @@ def return_response(response, status):
     response.mimetype = 'application/json'
     return response
 
-
 if __name__ == '__main__':
-    app.run(host="127.0.0.1", port=5000)
+    port = int(os.environ.get("PORT", 5000)) # <-----
+    app.run(host='0.0.0.0', port=port) 
