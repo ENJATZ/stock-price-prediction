@@ -1,4 +1,4 @@
-import {StyleSheet} from 'react-native';
+import { StyleSheet } from 'react-native';
 
 export const colors = {
   primary: '#285474',
@@ -9,6 +9,7 @@ export const colors = {
 
 export const SCREEN = {
   HOME: 'homeScreen',
+  SEARCH: 'searchScreen',
   VIEWCHART: 'viewChartScreen',
 };
 

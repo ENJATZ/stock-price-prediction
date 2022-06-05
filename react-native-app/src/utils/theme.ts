@@ -37,6 +37,8 @@ export default {
     PALLETE5: '#747C96',
     DARK1: '#333333',
     DARK2: '#4d4d4d',
+    DARK3: '#262626',
+    YELLOW_LOGO: '#FFDE59',
     YELLOW: '#ffb400',
   },
 };

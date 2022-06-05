@@ -1,0 +1,7 @@
+{
+  "_comment": "src/localization/ro/translation.json",
+  "homeScreen": {
+    "findTicker": "Caută folosind simbolul",
+    "findPlaceholder": "ex: AAPL (Apple)"
+  }
+}

@@ -4,26 +4,23 @@ import { useTranslation } from 'react-i18next';
 import {
   Animated,
   Dimensions,
-  Image,
-  ScrollView,
-  KeyboardAvoidingView,
-  TouchableWithoutFeedback,
-  Platform,
   Keyboard,
+  TouchableWithoutFeedback,
 } from 'react-native';
 import { AutocompleteDropdown } from 'react-native-autocomplete-dropdown';
 import LinearGradient from 'react-native-linear-gradient';
 import Spinner from 'react-native-loading-spinner-overlay';
 import { ProgressBar } from '../../components/ProgressBar/ProgressBar';
+import { LanguageSelector } from '../../components/LanguageSelector/LanguageSelector';
 import { Text } from '../../components/Text/Text';
+import { useKeyboardStatus } from '../../hooks/useKeyboardStatus';
 import { DataSetType, SuggestionType } from '../../types';
 import { SCREEN } from '../../utils/definitions';
 import theme from '../../utils/theme';
-import { fetchData, findSuggestions } from './HomeAPI';
-import * as S from './Home.styles';
-import { useKeyboardStatus } from '../../hooks/useKeyboardStatus';
+import * as S from './Search.styles';
+import { fetchData, findSuggestions } from './Search.service';
 
-export const Home = ({ navigation }: any) => {
+export const Search = ({ navigation }: any) => {
   const HEIGHT = 200;
 
   const { t, i18n } = useTranslation();
@@ -46,10 +43,14 @@ export const Home = ({ navigation }: any) => {
     setSuggestionsLoading(true);
 
     const yahooSuggestions = await findSuggestions(input);
-    const _dataSet = yahooSuggestions.map((item: SuggestionType, index) => ({
-      id: index.toString(),
-      title: `${item.symbol};${item.name};${item.exchange}`,
-    }));
+    const _dataSet = yahooSuggestions
+      .filter(
+        (item: SuggestionType) => item.name && item.exchange && item.symbol,
+      )
+      .map((item: SuggestionType, index) => ({
+        id: index.toString(),
+        title: `${item.symbol};${item.name};${item.exchange}`,
+      }));
     setDataSet(_dataSet);
 
     setSuggestionsLoading(false);
@@ -123,7 +124,7 @@ export const Home = ({ navigation }: any) => {
   }
   return (
     <LinearGradient
-      colors={[theme.COLORS.PALLETE2, theme.COLORS.PALLETE2]}
+      colors={[theme.COLORS.DARK3, theme.COLORS.DARK3]}
       style={{ height: height }}>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <S.KeyboardAvoidingView>
@@ -132,7 +133,7 @@ export const Home = ({ navigation }: any) => {
               style={{ width: animatedValue, height: animatedValue }}
               source={require('../../assets/logo.png')}
             />
-            <Text>Search a company</Text>
+            <Text>{t('homeScreen.findTicker')}</Text>
             <AutocompleteDropdown
               //ref={searchRef}
               controller={controller => {
@@ -151,7 +152,7 @@ export const Home = ({ navigation }: any) => {
               loading={suggestionsLoading}
               useFilter={false} // prevent rerender twice
               textInputProps={{
-                placeholder: 'e.g: AAPL (Apple)',
+                placeholder: t('homeScreen.findPlaceholder'),
                 autoCorrect: false,
                 autoCapitalize: 'none',
                 style: {
@@ -175,7 +176,7 @@ export const Home = ({ navigation }: any) => {
               }}
               suggestionsListContainerStyle={{
                 backgroundColor: '#383b42',
-                width: 260,
+                width: 200,
               }}
               containerStyle={{ flexGrow: 1, flexShrink: 1 }}
               renderItem={(item, text) => {
@@ -195,6 +196,16 @@ export const Home = ({ navigation }: any) => {
           </S.ViewLayout>
         </S.KeyboardAvoidingView>
       </TouchableWithoutFeedback>
+      <Block
+        style={{
+          position: 'absolute',
+          bottom: 200,
+          display: 'flex',
+          justifyContent: 'center',
+          width: '100%',
+        }}>
+        <LanguageSelector />
+      </Block>
     </LinearGradient>
   );
 };

@@ -1,0 +1,7 @@
+{
+  "_comment": "src/localization/en/translation.json",
+  "homeScreen": {
+    "findTicker": "Search by ticker",
+    "findPlaceholder": "e.g: AAPL (Apple)"
+  }
+}
