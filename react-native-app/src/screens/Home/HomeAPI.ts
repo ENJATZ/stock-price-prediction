@@ -2,7 +2,8 @@ import yahooFinance from 'yahoo-finance2';
 import { SuggestionType } from '../../types';
 import { sliceByPeriod } from '../../utils/slices';
 
-const apiURL = 'http://127.0.0.1:5000';
+const apiURL =
+  'http://docker-flask.eba-svwvnx8z.eu-west-3.elasticbeanstalk.com';
 const CHART_SIZE = 10;
 const PREDICT_SIZE = 5;
 
