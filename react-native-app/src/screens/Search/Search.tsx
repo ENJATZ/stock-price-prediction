@@ -9,31 +9,29 @@ import {
 } from 'react-native';
 import { AutocompleteDropdown } from 'react-native-autocomplete-dropdown';
 import LinearGradient from 'react-native-linear-gradient';
-import Spinner from 'react-native-loading-spinner-overlay';
-import { ProgressBar } from '../../components/ProgressBar/ProgressBar';
 import { LanguageSelector } from '../../components/LanguageSelector/LanguageSelector';
 import { Text } from '../../components/Text/Text';
 import { useKeyboardStatus } from '../../hooks/useKeyboardStatus';
 import { DataSetType, SuggestionType } from '../../types';
 import { SCREEN } from '../../utils/definitions';
-import theme from '../../utils/theme';
 import * as S from './Search.styles';
-import { fetchData, findSuggestions } from './Search.service';
+import yahooService from '../../services/yahoo.service';
+import theme from '../../utils/theme';
 
 export const Search = ({ navigation }: any) => {
   const HEIGHT = 200;
 
-  const { t, i18n } = useTranslation();
-  const { height, width } = Dimensions.get('screen');
+  const { t } = useTranslation();
+  const { height } = Dimensions.get('screen');
   const [dataSet, setDataSet] = useState<DataSetType[] | undefined>(undefined);
   const dropdownController = useRef(null);
-  const loaderValue = useRef(new Animated.Value(0)).current;
   const [suggestionsLoading, setSuggestionsLoading] = useState(false);
-  const [loading, setLoading] = useState(0);
-  const [chartData, setChartData] = useState(undefined);
-  const countInterval = useRef<any>(null);
   const animatedValue = React.useRef(new Animated.Value(HEIGHT)).current;
   const isKeyboardOpened = useKeyboardStatus();
+
+  const navigateToChart = (symbol: string) => {
+    navigation.navigate(SCREEN.VIEWCHART, { symbol });
+  };
 
   const getSuggestions = useCallback(async input => {
     if (typeof input !== 'string' || input.length < 2) {
@@ -42,7 +40,7 @@ export const Search = ({ navigation }: any) => {
     }
     setSuggestionsLoading(true);
 
-    const yahooSuggestions = await findSuggestions(input);
+    const yahooSuggestions = await yahooService.findSuggestions(input);
     const _dataSet = yahooSuggestions
       .filter(
         (item: SuggestionType) => item.name && item.exchange && item.symbol,
@@ -52,47 +50,15 @@ export const Search = ({ navigation }: any) => {
         title: `${item.symbol};${item.name};${item.exchange}`,
       }));
     setDataSet(_dataSet);
-
     setSuggestionsLoading(false);
   }, []);
 
-  // Loading handling
   const handleItemSelection = (id: string) => {
     const symbol = dataSet && dataSet[parseInt(id)].title?.split(';')[0];
     if (symbol) {
-      setLoading(1);
-      fetchData(symbol, (error, data) => {
-        if (data) {
-          setChartData(data);
-        }
-      });
+      navigateToChart(symbol);
     }
   };
-  const load = (count: any) => {
-    Animated.timing(loaderValue, {
-      toValue: count,
-      duration: 500,
-      useNativeDriver: false,
-    }).start();
-  };
-  useEffect(() => {
-    if (loading === 1) {
-      countInterval.current = setInterval(() => {
-        if (loading > 0 && loading < 100) {
-          setLoading(old => old + 5);
-        }
-      }, 400);
-    } else {
-      load(loading);
-      if (loading >= 100 && chartData) {
-        clearInterval(countInterval.current);
-        navigation.navigate(SCREEN.VIEWCHART, { data: chartData });
-        setLoading(0);
-      }
-    }
-  }, [loading]);
-  // Loading handling
-
   useEffect(() => {
     const toValue = isKeyboardOpened ? HEIGHT * 0.8 : HEIGHT;
     Animated.timing(animatedValue, {
@@ -103,25 +69,6 @@ export const Search = ({ navigation }: any) => {
     }).start();
   }, [isKeyboardOpened, animatedValue]);
 
-  const aWidth = loaderValue.interpolate({
-    inputRange: [0, 100],
-    outputRange: ['0%', '100%'],
-    extrapolate: 'clamp',
-  });
-  if (loading > 0) {
-    return (
-      <LinearGradient
-        colors={[theme.COLORS.DARK1, theme.COLORS.DARK1]}
-        style={{ height: height }}>
-        <Block flex center style={{ paddingTop: 30 }}>
-          <Spinner visible textStyle={{ color: 'white' }} />
-          <Block style={{ paddingTop: 450 }}>
-            <ProgressBar aWidth={aWidth} />
-          </Block>
-        </Block>
-      </LinearGradient>
-    );
-  }
   return (
     <LinearGradient
       colors={[theme.COLORS.DARK3, theme.COLORS.DARK3]}

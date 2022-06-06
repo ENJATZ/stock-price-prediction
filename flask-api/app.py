@@ -35,10 +35,11 @@ def top10():
     print(day_gainers)
     return return_response(day_gainers, 200)
 
-@app.route('/tickr_info/<tickr>/period', methods=['GET'])
+@app.route('/tickr_info/<tickr>/<period>', methods=['GET'])
 def tickr_info(tickr, period):
     df = pdr.get_data_yahoo(tickr, period=period, interval="1d")
-    yf_data = json.loads(json.dumps(list(df.T.to_dict().values())))
+    print(df)
+    yf_data = df.to_json(orient = 'index')
     return return_response(yf_data, 200)
 
 @app.route('/')

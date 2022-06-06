@@ -9,10 +9,16 @@ export const Button = styled(GButton)<ButtonType>`
     width: 75;
     height: 28;
   `}
+  ${({ width }) =>
+    width &&
+    `
+    width: ${width}
+  `}
   font-size: 12px;
   font-weight: bold;
 `;
 
 type ButtonType = {
   color: typeof theme.COLORS;
+  width: boolean;
 };

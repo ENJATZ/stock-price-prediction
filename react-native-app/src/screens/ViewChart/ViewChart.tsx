@@ -1,6 +1,6 @@
 import { Block } from 'galio-framework';
 import React, { useState } from 'react';
-import { Dimensions, Image, ScrollView } from 'react-native';
+import { Dimensions, ScrollView, TouchableWithoutFeedback } from 'react-native';
 import { LineChart } from 'react-native-chart-kit';
 import LinearGradient from 'react-native-linear-gradient';
 import {
@@ -11,69 +11,99 @@ import { Text } from '../../components/Text/Text';
 import theme from '../../utils/theme';
 import { nFormatter } from '../../utils/helpers';
 import { RatingIndicator } from '../../components/RatingIndicator/RatingIndicator';
+import yahooService from '../../services/yahoo.service';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+
 import * as S from './ViewChart.styles';
+import { Loading } from '../../components/Loading/Loading';
+import { useFocusEffect } from '@react-navigation/native';
 
-export const ViewChart = ({ navigation, route }: any) => {
-  const data = route.params?.data;
-  const { height, width } = Dimensions.get('screen');
-  const { predictData, yfData } = data;
-  const [hasPrediction, setHasPrediction] = useState(false);
-  const OxLabels = predictData.forecasts[0].map((x: any) => {
-    const date = new Date(x.date);
-    return `${date.getDate()}`;
-  });
-  const OyData = predictData.forecasts.map((forecast: any) =>
-    forecast.map((x: any) => x.value),
-  );
-  const realPrice = predictData.realPrice.map((x: any) => x.Close);
+export const ViewChart = ({ route }: any) => {
+  const symbol = route.params?.symbol;
+  const { height } = Dimensions.get('screen');
+  const [isLoading, setIsLoading] = useState(true);
+  const [yfData, setYfData] = useState<any>([]);
+  const [chartData, setChartData] = useState({});
+  const [loadingStep, setLoadingStep] = useState(20);
 
-  const chartData = {
-    labels: OxLabels,
-    datasets: [
-      {
-        data: OyData[0],
-        color: () => `#e27c7c`,
-      },
-      {
-        data: OyData[1],
-        color: () => `#e4bcad`,
-      },
-      {
-        data: OyData[2],
-      },
-      {
-        data: realPrice,
-        color: () => `#ffb400`,
-        strokeWidth: 3,
-      },
-    ],
-    legend: ['Scen. 1', 'Scen. 2', 'Scen. 3', yfData.symbol],
+  const setupTable = (
+    data: any,
+    predictData: any = undefined,
+    hasPrediction: boolean = false,
+  ) => {
+    let predictionDataset: any = [];
+    let legend = [data?.summary?.symbol];
+
+    const OxLabels = data?.chart?.map((x: any) => {
+      const date = new Date(x.date);
+      return `${date.getDate()}`;
+    });
+
+    if (hasPrediction) {
+      const OyData = predictData.forecasts.map((forecast: any) =>
+        forecast.map((x: any) => x.value),
+      );
+
+      predictionDataset = [
+        {
+          data: OyData[0],
+          color: () => '#e27c7c',
+        },
+        {
+          data: OyData[1],
+          color: () => '#e4bcad',
+        },
+        {
+          data: OyData[2],
+        },
+      ];
+      legend = ['Scen. 1', 'Scen. 2', 'Scen. 3', data?.summary?.symbol];
+    }
+    const realPrice = data?.chart?.map((x: any) => x.close);
+
+    const _chartData = {
+      labels: OxLabels,
+      datasets: [
+        ...predictionDataset,
+        {
+          data: realPrice,
+          color: () => '#ffb400',
+          strokeWidth: 3,
+        },
+      ],
+      legend,
+    };
+    console.log(
+      '🚀 ~ file: ViewChart.tsx ~ line 81 ~ setupTable ~ _chartData',
+      _chartData,
+    );
+    setChartData(_chartData);
   };
 
   const summaries = [
     {
       name: 'Previous close',
-      value: yfData.regularMarketPreviousClose,
+      value: yfData?.summary?.regularMarketPreviousClose,
     },
     {
       name: 'Market cap',
-      value: nFormatter(yfData.marketCap, 1),
+      value: nFormatter(yfData?.summary?.marketCap, 1),
     },
     {
       name: 'Open',
-      value: yfData.regularMarketOpen,
+      value: yfData?.summary?.regularMarketOpen,
     },
     {
       name: 'Volume',
-      value: nFormatter(yfData.regularMarketVolume, 1),
+      value: nFormatter(yfData?.summary?.regularMarketVolume, 1),
     },
     {
       name: 'Earning per share',
-      value: yfData.epsTrailingTwelveMonths,
+      value: yfData?.summary?.epsTrailingTwelveMonths,
     },
     {
       name: 'Avg. volume (10d)',
-      value: nFormatter(yfData.averageDailyVolume10Day, 1),
+      value: nFormatter(yfData?.summary?.averageDailyVolume10Day, 1),
     },
     {
       name: 'Earnings date',
@@ -82,54 +112,94 @@ export const ViewChart = ({ navigation, route }: any) => {
     },
     {
       name: 'Analyst rating',
-      value: yfData.averageAnalystRating,
+      value: yfData?.summary?.averageAnalystRating,
     },
   ];
+  useFocusEffect(
+    React.useCallback(() => {
+      setIsLoading(true);
+      setLoadingStep(20);
+      setYfData([]);
+
+      yahooService.fetchYahooData(symbol, (_, data) => {
+        setYfData(data);
+        setupTable(data);
+        setIsLoading(false);
+      });
+    }, [symbol]),
+  );
+
+  if (isLoading || !chartData) {
+    return (
+      <LinearGradient
+        colors={[theme.COLORS.DARK1, theme.COLORS.DARK1]}
+        style={{ height: height }}>
+        <Loading step={loadingStep} showBar={true} />
+      </LinearGradient>
+    );
+  }
+  const getPrediction = () => {
+    setLoadingStep(5);
+    setIsLoading(true);
+    yahooService.fetchApiData(symbol, (_, data) => {
+      console.log(
+        '🚀 ~ file: ViewChart.tsx ~ line 148 ~ yahooService.fetchApiData ~ data',
+        data,
+      );
+      setIsLoading(false);
+      setupTable(yfData, data, true);
+    });
+  };
   return (
     <LinearGradient
       colors={[theme.COLORS.DARK1, theme.COLORS.DARK1]}
       style={{ height: height }}>
       <ScrollView
         showsVerticalScrollIndicator={false}
-        style={{ display: 'flex', paddingTop: 50 }}>
+        style={{ display: 'flex', paddingTop: 5 }}>
         <Block style={{ paddingLeft: 10, paddingRight: 10 }}>
           <Block>
             <Text color="gray">
-              {yfData.longName} ({yfData.fullExchangeName})
+              {yfData?.summary?.longName} ({yfData?.summary?.fullExchangeName})
             </Text>
           </Block>
           <Block flex space="between" row>
             <Block>
               <Block flex row>
-                <Image
-                  style={{ marginTop: 5, marginRight: 5 }}
-                  source={{
-                    uri: 'https://cdn-icons-png.flaticon.com/512/732/732221.png',
-                    width: 26,
-                    height: 26,
-                  }}
+                <FontAwesome5
+                  name="star"
+                  color="gray"
+                  size={25}
+                  style={{ marginRight: 3, marginTop: 5 }}
                 />
                 <Text size="30" style={{ marginRight: 7 }}>
-                  {yfData.symbol}
+                  {yfData?.summary?.symbol}
                 </Text>
                 <Block style={{ marginTop: 4, marginRight: 3 }}>
                   <Text
                     size="10"
                     color={
-                      yfData.regularMarketChangePercent < 0
+                      yfData?.summary?.regularMarketChangePercent < 0
                         ? '#ce4747'
                         : '#1E90FF'
                     }>
-                    {parseFloat(yfData.regularMarketChangePercent).toFixed(2)}%
+                    {parseFloat(
+                      yfData?.summary?.regularMarketChangePercent,
+                    ).toFixed(2)}
+                    %
                   </Text>
                   <Text
                     size="12"
                     color={
-                      yfData.regularMarketChange < 0 ? '#ce4747' : '#1E90FF'
+                      yfData?.summary?.regularMarketChange < 0
+                        ? '#ce4747'
+                        : '#1E90FF'
                     }>
                     $
                     {Math.abs(
-                      parseFloat(yfData.regularMarketChange).toFixed(2),
+                      parseFloat(yfData?.summary?.regularMarketChange).toFixed(
+                        2,
+                      ),
                     )}
                   </Text>
                 </Block>
@@ -137,10 +207,10 @@ export const ViewChart = ({ navigation, route }: any) => {
             </Block>
             <Block>
               <Text style={{ textAlign: 'right' }}>
-                ${yfData.regularMarketPrice}
+                ${yfData?.summary?.regularMarketPrice}
               </Text>
               <Text style={{ textAlign: 'right' }} size="12">
-                market {yfData.marketState.toLowerCase()}
+                market {yfData?.summary?.marketState.toLowerCase()}
               </Text>
             </Block>
           </Block>
@@ -166,6 +236,13 @@ export const ViewChart = ({ navigation, route }: any) => {
               borderRadius: 5,
             }}
           />
+          <Block flex center fluid width="100%">
+            <TouchableWithoutFeedback onPress={() => getPrediction()}>
+              <S.AnalyzeButton>
+                <Text>Analyze</Text>
+              </S.AnalyzeButton>
+            </TouchableWithoutFeedback>
+          </Block>
           <Block>
             <S.InfoBlock>
               <Text size="18" style={{ marginBottom: 10 }}>
@@ -186,7 +263,9 @@ export const ViewChart = ({ navigation, route }: any) => {
                 Analysts rating
               </Text>
               <Block middle>
-                <RatingIndicator yfRating={yfData.averageAnalystRating} />
+                <RatingIndicator
+                  yfRating={yfData?.summary?.averageAnalystRating}
+                />
               </Block>
             </S.InfoBlock>
           </Block>

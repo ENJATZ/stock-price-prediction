@@ -27,14 +27,16 @@ const App = () => {
               tabBarIcon: ({ focused, color, size }) => {
                 let iconName;
 
-                if (route.name === 'Home') {
-                  iconName = 'home';
-                } else if (route.name === 'View Chart') {
-                  iconName = 'chart-bar';
-                } else if (route.name === 'Favorites') {
-                  iconName = 'star';
-                } else if (route.name === 'Search') {
-                  iconName = 'search';
+                switch (route.name) {
+                  case SCREEN.HOME:
+                    iconName = 'home';
+                    break;
+                  case SCREEN.VIEWCHART:
+                    iconName = 'chart-bar';
+                    break;
+                  case SCREEN.SEARCH:
+                    iconName = 'search';
+                    break;
                 }
 
                 return (
@@ -56,9 +58,9 @@ const App = () => {
               },
               tabBarLabelStyle: { marginBottom: -3, paddingTop: 0 },
             })}>
-            <Tab.Screen name="Home" component={Screen.Home} />
-            <Tab.Screen name="Search" component={Screen.Search} />
-            <Tab.Screen name="Favorites" component={Screen.ViewChart} />
+            <Tab.Screen name={SCREEN.HOME} component={Screen.Home} />
+            <Tab.Screen name={SCREEN.SEARCH} component={Screen.Search} />
+            <Tab.Screen name={SCREEN.VIEWCHART} component={Screen.ViewChart} />
           </Tab.Navigator>
         </Block>
       </GalioProvider>
