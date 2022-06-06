@@ -1,5 +1,5 @@
 import { Block } from 'galio-framework';
-import React from 'react';
+import React, { useState } from 'react';
 import { Dimensions, Image, ScrollView } from 'react-native';
 import { LineChart } from 'react-native-chart-kit';
 import LinearGradient from 'react-native-linear-gradient';
@@ -14,11 +14,10 @@ import { RatingIndicator } from '../../components/RatingIndicator/RatingIndicato
 import * as S from './ViewChart.styles';
 
 export const ViewChart = ({ navigation, route }: any) => {
-  console.log(route);
   const data = route.params?.data;
   const { height, width } = Dimensions.get('screen');
   const { predictData, yfData } = data;
-
+  const [hasPrediction, setHasPrediction] = useState(false);
   const OxLabels = predictData.forecasts[0].map((x: any) => {
     const date = new Date(x.date);
     return `${date.getDate()}`;

@@ -56,7 +56,7 @@ const App = () => {
               },
               tabBarLabelStyle: { marginBottom: -3, paddingTop: 0 },
             })}>
-            <Tab.Screen name="Home" component={Screen.Search} />
+            <Tab.Screen name="Home" component={Screen.Home} />
             <Tab.Screen name="Search" component={Screen.Search} />
             <Tab.Screen name="Favorites" component={Screen.ViewChart} />
           </Tab.Navigator>

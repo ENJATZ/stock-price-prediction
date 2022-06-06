@@ -11,8 +11,10 @@ import sys
 import warnings
 import tensorflow as tf
 from func.forecast import forecast
+from func.gainers import get_top_gainers
 import json
 import os
+
 
 if not sys.warnoptions:
     warnings.simplefilter('ignore')
@@ -26,6 +28,18 @@ yf.pdr_override()  # <== that's all it takes :-)
 app = Flask(__name__)
 CORS(app)
 simulations = 3
+
+@app.route('/top10', methods=['GET'])
+def top10():
+    day_gainers = get_top_gainers();
+    print(day_gainers)
+    return return_response(day_gainers, 200)
+
+@app.route('/tickr_info/<tickr>/period', methods=['GET'])
+def tickr_info(tickr, period):
+    df = pdr.get_data_yahoo(tickr, period=period, interval="1d")
+    yf_data = json.loads(json.dumps(list(df.T.to_dict().values())))
+    return return_response(yf_data, 200)
 
 @app.route('/')
 def index():

@@ -1,9 +1,9 @@
 import styled from 'styled-components/native';
-import {Button as GButton} from 'galio-framework';
+import { Button as GButton } from 'galio-framework';
 import theme from '../../utils/theme';
 
 export const Button = styled(GButton)<ButtonType>`
-  ${({small}) =>
+  ${({ small }) =>
     small &&
     `
     width: 75;
