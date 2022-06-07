@@ -1,12 +1,11 @@
 import { Block } from 'galio-framework';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Text } from '../../components/Text/Text';
 import theme from '../../utils/theme';
 import { Dimensions, Image, SafeAreaView, ScrollView } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import * as S from './Home.styles';
 import { SCREEN } from '../../utils/definitions';
-import { useFocusEffect } from '@react-navigation/native';
 import apiService from '../../services/api.service';
 import { Loading } from '../../components/Loading/Loading';
 import { useAppContext } from '../../components/AppContextProvider/AppContextProvider';
@@ -21,18 +20,16 @@ export const Home = ({ navigation }: any) => {
   const sortArray = (array: any[]) =>
     array.sort((a, b) => a['% Change'] - b['% Change']).slice(0, 10);
 
-  useFocusEffect(
-    React.useCallback(() => {
-      setIsLoading(true);
+  useEffect(() => {
+    setIsLoading(true);
 
-      apiService.fetchTop((_, _data) => {
-        _data.gainers = sortArray(_data.gainers);
-        _data.losers = sortArray(_data.losers);
-        setData(_data);
-        setIsLoading(false);
-      });
-    }, []),
-  );
+    apiService.fetchTop((_, _data) => {
+      _data.gainers = sortArray(_data.gainers);
+      _data.losers = sortArray(_data.losers);
+      setData(_data);
+      setIsLoading(false);
+    });
+  }, []);
 
   const navigateToChart = (symbol: string) => {
     navigation.reset({

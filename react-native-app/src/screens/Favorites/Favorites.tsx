@@ -21,19 +21,31 @@ export const Favorites = ({ navigation }: any) => {
   useFocusEffect(
     React.useCallback(() => {
       setIsLoading(true);
-      yahooService.fetchSymbols(appState.favoriteList, (_: any, _data: any) => {
-        const mappedData = _data.map((item: any) => {
-          return {
-            Symbol: item.symbol,
-            Change: parseFloat(item.regularMarketChange).toFixed(2),
-            Name: item.shortName,
-            '% Change': parseFloat(item.regularMarketChangePercent).toFixed(2),
-            'Price (Intraday)': parseFloat(item.regularMarketPrice).toFixed(2),
-          };
-        });
-        setData(mappedData);
+      if (appState.favoriteList.length > 0) {
+        yahooService.fetchSymbols(
+          appState.favoriteList,
+          (_: any, _data: any) => {
+            const mappedData = _data.map((item: any) => {
+              return {
+                Symbol: item.symbol,
+                Change: parseFloat(item.regularMarketChange).toFixed(2),
+                Name: item.shortName,
+                '% Change': parseFloat(item.regularMarketChangePercent).toFixed(
+                  2,
+                ),
+                'Price (Intraday)': parseFloat(item.regularMarketPrice).toFixed(
+                  2,
+                ),
+              };
+            });
+            setData(mappedData);
+            setIsLoading(false);
+          },
+        );
+      } else {
+        setData([]);
         setIsLoading(false);
-      });
+      }
     }, [appState.favoriteList]),
   );
 
@@ -76,16 +88,22 @@ export const Favorites = ({ navigation }: any) => {
               </Text>
             </S.Title>
             <S.List>
-              {data.map((item: any) => (
-                <ListItem
-                  key={item.Symbol}
-                  item={item}
-                  trend="gain"
-                  isFavorite={isFavorite(item.Symbol)}
-                  toggleFavorite={toggleFavorite}
-                  navigateToChart={navigateToChart}
-                />
-              ))}
+              {data.length > 0 ? (
+                data.map((item: any) => (
+                  <ListItem
+                    key={item.Symbol}
+                    item={item}
+                    trend="gain"
+                    isFavorite={isFavorite(item.Symbol)}
+                    toggleFavorite={toggleFavorite}
+                    navigateToChart={navigateToChart}
+                  />
+                ))
+              ) : (
+                <Block center style={{ height: '100%' }}>
+                  <Text>No data</Text>
+                </Block>
+              )}
             </S.List>
           </S.Screen>
         </ScrollView>

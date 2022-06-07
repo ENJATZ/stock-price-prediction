@@ -20,7 +20,7 @@ export const fetchApiData = async (
   symbol: string,
   callback: (error: any, data: any) => void,
 ) => {
-  const period = '60d',
+  const period = '100d',
     test_size = 5;
 
   const apiResponse = await fetch(

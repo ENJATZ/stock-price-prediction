@@ -1,5 +1,5 @@
 import { Block } from 'galio-framework';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Dimensions, ScrollView, TouchableWithoutFeedback } from 'react-native';
 import { LineChart } from 'react-native-chart-kit';
 import LinearGradient from 'react-native-linear-gradient';
@@ -19,8 +19,9 @@ import { Loading } from '../../components/Loading/Loading';
 import { useFocusEffect } from '@react-navigation/native';
 import apiService from '../../services/api.service';
 import { useAppContext } from '../../components/AppContextProvider/AppContextProvider';
+import { SCREEN } from '../../utils/definitions';
 
-export const ViewChart = ({ route }: any) => {
+export const ViewChart = ({ navigation, route }: any) => {
   const symbol = route.params?.symbol;
   const { height } = Dimensions.get('screen');
   const [isLoading, setIsLoading] = useState(true);
@@ -114,19 +115,56 @@ export const ViewChart = ({ route }: any) => {
       value: yfData?.summary?.averageAnalystRating,
     },
   ];
-  useFocusEffect(
-    React.useCallback(() => {
+  // useFocusEffect(
+  //   React.useCallback(() => {
+  //     console.log(
+  //       '🚀 ~ file: ViewChart.tsx ~ line 121 ~ React.useCallback ~ !route.params?.symbol',
+  //       route.params?.symbol,
+  //     );
+  //     if (!route.params?.symbol || typeof route.params?.symbol !== 'string') {
+  //       navigation.navigate(SCREEN.SEARCH);
+  //     } else {
+  //       setIsLoading(true);
+  //       setLoadingStep(20);
+  //       setYfData([]);
+
+  //       yahooService.fetchYahooData(symbol, (_, data) => {
+  //         setYfData(data);
+  //         setupTable(data);
+  //         setIsLoading(false);
+  //       });
+  //     }
+  //   }, [symbol, navigation, route]),
+  // );
+
+  useEffect(() => {
+    if (!route.params?.symbol || typeof route.params?.symbol !== 'string') {
+      if (navigation.routeName !== SCREEN.SEARCH) {
+        navigation.navigate(SCREEN.SEARCH);
+      }
+    } else {
       setIsLoading(true);
       setLoadingStep(20);
       setYfData([]);
 
-      yahooService.fetchYahooData(symbol, (_, data) => {
+      yahooService.fetchYahooData(route.params?.symbol, (_, data) => {
         setYfData(data);
         setupTable(data);
         setIsLoading(false);
       });
-    }, [symbol]),
-  );
+    }
+  }, [route.params?.symbol, navigation]);
+
+  useFocusEffect(() => {
+    console.log(
+      '🚀 ~ file: ViewChart.tsx ~ line 160 ~ useFocusEffect ~ route.params?.symbol',
+      route.params?.symbol,
+    );
+    if (!route.params?.symbol || typeof route.params?.symbol !== 'string') {
+      setIsLoading(false);
+      navigation.navigate(SCREEN.SEARCH);
+    }
+  });
 
   const toggleFavorite = () => {
     dispatch({ type: 0, symbol });
@@ -151,6 +189,13 @@ export const ViewChart = ({ route }: any) => {
       setupTable(yfData, data, true);
     });
   };
+  if (!yfData?.summary) {
+    return (
+      <Block>
+        <Text>404</Text>
+      </Block>
+    );
+  }
   return (
     <LinearGradient
       colors={[theme.COLORS.DARK1, theme.COLORS.DARK1]}
