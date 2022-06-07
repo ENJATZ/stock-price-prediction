@@ -10,9 +10,11 @@ import apiService from '../../services/api.service';
 import { Loading } from '../../components/Loading/Loading';
 import { useAppContext } from '../../components/AppContextProvider/AppContextProvider';
 import { ListItem } from '../../components/ListItem/ListItem';
+import { useTranslation } from 'react-i18next';
 
 export const Home = ({ navigation }: any) => {
   const { height } = Dimensions.get('screen');
+  const { t } = useTranslation();
   const [data, setData] = useState<any>([]);
   const [isLoading, setIsLoading] = useState(true);
   const { state: appState, dispatch } = useAppContext();
@@ -68,7 +70,7 @@ export const Home = ({ navigation }: any) => {
               <S.Title>
                 <Image source={require('../../assets/podium.png')} />
                 <Text size="25" style={{ marginLeft: 7 }}>
-                  Top 10 Gainers
+                  {t('homeScreen.topGainers')}
                 </Text>
               </S.Title>
               <S.List>
@@ -87,7 +89,7 @@ export const Home = ({ navigation }: any) => {
               <S.Title>
                 <Image source={require('../../assets/downtrend.png')} />
                 <Text size="25" style={{ marginLeft: 7 }}>
-                  Top 10 Losers
+                  {t('homeScreen.topLosers')}
                 </Text>
               </S.Title>
               <S.List>

@@ -1,7 +1,31 @@
 {
   "_comment": "src/localization/en/translation.json",
   "homeScreen": {
+    "title": "Trending",
+    "topGainers": "Top 10 Gainers",
+    "topLosers": "Top 10 Losers"
+  },
+  "searchScreen": {
+    "title": "Search",
     "findTicker": "Search by ticker",
     "findPlaceholder": "e.g: AAPL (Apple)"
+  },
+  "viewChartScreen": {
+    "title": "View Chart",
+    "previousClose": "Previous Close",
+    "marketCap": "Market Cap",
+    "open": "Open",
+    "volume": "Volume",
+    "eps": "Earnings Per Share",
+    "avgVolume": "Average Volume",
+    "earningsDate": "Earnings Date",
+    "analystRating": "Analyst Rating",
+    "anlystIndicator": "Analyst Indicator",
+    "buttonAnalyze": "Analyze",
+    "summary": "Summary"
+  },
+  "favoriteScreen": {
+    "title": "Favorites",
+    "noData": "Your favorites list is empty."
   }
 }

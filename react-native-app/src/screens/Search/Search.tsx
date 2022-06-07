@@ -80,7 +80,7 @@ export const Search = ({ navigation }: any) => {
               style={{ width: animatedValue, height: animatedValue }}
               source={require('../../assets/logo.png')}
             />
-            <Text>{t('homeScreen.findTicker')}</Text>
+            <Text>{t('searchScreen.findTicker')}</Text>
             <AutocompleteDropdown
               //ref={searchRef}
               controller={controller => {
@@ -99,7 +99,7 @@ export const Search = ({ navigation }: any) => {
               loading={suggestionsLoading}
               useFilter={false} // prevent rerender twice
               textInputProps={{
-                placeholder: t('homeScreen.findPlaceholder'),
+                placeholder: t('searchScreen.findPlaceholder'),
                 autoCorrect: false,
                 autoCapitalize: 'none',
                 style: {

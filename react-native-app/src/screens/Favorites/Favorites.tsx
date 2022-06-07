@@ -1,6 +1,7 @@
 import { useFocusEffect } from '@react-navigation/native';
 import { Block } from 'galio-framework';
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Dimensions, Image, SafeAreaView, ScrollView } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import { useAppContext } from '../../components/AppContextProvider/AppContextProvider';
@@ -13,6 +14,7 @@ import theme from '../../utils/theme';
 import * as S from './Favorites.styles';
 
 export const Favorites = ({ navigation }: any) => {
+  const { t } = useTranslation();
   const { height } = Dimensions.get('screen');
   const { state: appState, dispatch } = useAppContext();
   const [data, setData] = useState<any>([]);
@@ -84,7 +86,7 @@ export const Favorites = ({ navigation }: any) => {
             <S.Title>
               <Image source={require('../../assets/bookmark.png')} />
               <Text size="25" style={{ marginLeft: 7 }}>
-                Favorites
+                {t('favoriteScreen.title')}
               </Text>
             </S.Title>
             <S.List>
@@ -93,7 +95,7 @@ export const Favorites = ({ navigation }: any) => {
                   <ListItem
                     key={item.Symbol}
                     item={item}
-                    trend="gain"
+                    trend={parseFloat(item['% Change']) < 0 ? 'lose' : 'gain'}
                     isFavorite={isFavorite(item.Symbol)}
                     toggleFavorite={toggleFavorite}
                     navigateToChart={navigateToChart}
@@ -101,7 +103,7 @@ export const Favorites = ({ navigation }: any) => {
                 ))
               ) : (
                 <Block center style={{ height: '100%' }}>
-                  <Text>No data</Text>
+                  <Text>{t('favoriteScreen.noData')}</Text>
                 </Block>
               )}
             </S.List>

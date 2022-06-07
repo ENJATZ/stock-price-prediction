@@ -1,7 +1,31 @@
 {
   "_comment": "src/localization/ro/translation.json",
   "homeScreen": {
+    "title": "Trending",
+    "topGainers": "Top 10 Ascendente",
+    "topLosers": "Top 10 Descendente"
+  },
+  "searchScreen": {
+    "title": "Caută",
     "findTicker": "Caută folosind simbolul",
     "findPlaceholder": "ex: AAPL (Apple)"
+  },
+  "viewChartScreen": {
+    "title": "Vizuealizare Grafic",
+    "previousClose": "Închidre ant.",
+    "marketCap": "Capitalizare piață",
+    "open": "Deschis",
+    "volume": "Volum",
+    "eps": "Câștig per share",
+    "avgVolume": "Volum mediu",
+    "earningsDate": "Dată raport",
+    "analystRating": "Rating analist",
+    "anlystIndicator": "Analyst Indicator",
+    "buttonAnalyze": "Analizează",
+    "summary": "Informații"
+  },
+  "favoriteScreen": {
+    "title": "Listă favorite",
+    "noData": "Lista ta de favorite este goală."
   }
 }

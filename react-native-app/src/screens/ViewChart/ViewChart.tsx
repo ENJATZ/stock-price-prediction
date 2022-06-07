@@ -20,9 +20,11 @@ import { useFocusEffect } from '@react-navigation/native';
 import apiService from '../../services/api.service';
 import { useAppContext } from '../../components/AppContextProvider/AppContextProvider';
 import { SCREEN } from '../../utils/definitions';
+import { useTranslation } from 'react-i18next';
 
 export const ViewChart = ({ navigation, route }: any) => {
   const symbol = route.params?.symbol;
+  const { t } = useTranslation();
   const { height } = Dimensions.get('screen');
   const [isLoading, setIsLoading] = useState(true);
   const [yfData, setYfData] = useState<any>([]);
@@ -42,6 +44,7 @@ export const ViewChart = ({ navigation, route }: any) => {
       const date = new Date(x.date);
       return `${date.getDate()}`;
     });
+    let realPrice = data?.chart?.map((x: any) => x.Close);
 
     if (hasPrediction) {
       const OyData = predictData.forecasts.map((forecast: any) =>
@@ -62,8 +65,8 @@ export const ViewChart = ({ navigation, route }: any) => {
         },
       ];
       legend = ['Scen. 1', 'Scen. 2', 'Scen. 3', data?.summary?.symbol];
+      //realPrice = predictData.realPrice?.map((x: any) => x.Close);
     }
-    const realPrice = data?.chart?.map((x: any) => x.close);
 
     const _chartData = {
       labels: OxLabels,
@@ -82,36 +85,36 @@ export const ViewChart = ({ navigation, route }: any) => {
 
   const summaries = [
     {
-      name: 'Previous close',
+      name: t('viewChartScreen.previousClose'),
       value: yfData?.summary?.regularMarketPreviousClose,
     },
     {
-      name: 'Market cap',
+      name: t('viewChartScreen.marketCap'),
       value: nFormatter(yfData?.summary?.marketCap, 1),
     },
     {
-      name: 'Open',
+      name: t('viewChartScreen.open'),
       value: yfData?.summary?.regularMarketOpen,
     },
     {
-      name: 'Volume',
+      name: t('viewChartScreen.volume'),
       value: nFormatter(yfData?.summary?.regularMarketVolume, 1),
     },
     {
-      name: 'Earning per share',
+      name: t('viewChartScreen.eps'),
       value: yfData?.summary?.epsTrailingTwelveMonths,
     },
     {
-      name: 'Avg. volume (10d)',
+      name: t('viewChartScreen.avgVolume'),
       value: nFormatter(yfData?.summary?.averageDailyVolume10Day, 1),
     },
     {
-      name: 'Earnings date',
+      name: t('viewChartScreen.earningsDate'),
       //value: new Date(yfData.earningsTimestampStart),
       value: 1234,
     },
     {
-      name: 'Analyst rating',
+      name: t('viewChartScreen.analystRating'),
       value: yfData?.summary?.averageAnalystRating,
     },
   ];
@@ -147,7 +150,7 @@ export const ViewChart = ({ navigation, route }: any) => {
       setLoadingStep(20);
       setYfData([]);
 
-      yahooService.fetchYahooData(route.params?.symbol, (_, data) => {
+      apiService.fetchApiTickerData(route.params?.symbol, (_, data) => {
         setYfData(data);
         setupTable(data);
         setIsLoading(false);
@@ -156,10 +159,6 @@ export const ViewChart = ({ navigation, route }: any) => {
   }, [route.params?.symbol, navigation]);
 
   useFocusEffect(() => {
-    console.log(
-      '🚀 ~ file: ViewChart.tsx ~ line 160 ~ useFocusEffect ~ route.params?.symbol',
-      route.params?.symbol,
-    );
     if (!route.params?.symbol || typeof route.params?.symbol !== 'string') {
       setIsLoading(false);
       navigation.navigate(SCREEN.SEARCH);
@@ -288,14 +287,14 @@ export const ViewChart = ({ navigation, route }: any) => {
           <Block flex center fluid width="100%">
             <TouchableWithoutFeedback onPress={() => getPrediction()}>
               <S.AnalyzeButton>
-                <Text>Analyze</Text>
+                <Text>{t('viewChartScreen.buttonAnalyze')}</Text>
               </S.AnalyzeButton>
             </TouchableWithoutFeedback>
           </Block>
           <Block>
             <S.InfoBlock>
               <Text size="18" style={{ marginBottom: 10 }}>
-                Summary
+                {t('viewChartScreen.summary')}
               </Text>
               <Block
                 flex
@@ -309,7 +308,7 @@ export const ViewChart = ({ navigation, route }: any) => {
             </S.InfoBlock>
             <S.InfoBlock>
               <Text size="18" style={{ marginBottom: 10 }}>
-                Analysts rating
+                {t('viewChartScreen.analystRating')}
               </Text>
               <Block middle>
                 <RatingIndicator

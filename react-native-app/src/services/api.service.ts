@@ -16,7 +16,7 @@ export const fetchTop = async (callback: (error: any, data: any) => void) => {
   });
 };
 
-export const fetchApiData = async (
+export const fetchApiPrediction = async (
   symbol: string,
   callback: (error: any, data: any) => void,
 ) => {
@@ -37,8 +37,27 @@ export const fetchApiData = async (
     sliceByPeriod(await apiResponse.json(), CHART_SIZE, PREDICT_SIZE),
   );
 };
+export const fetchApiTickerData = async (
+  symbol: string,
+  callback: (error: any, data: any) => void,
+) => {
+  const period = '100d';
+
+  const apiResponse = await fetch(`${API_URL}/tickr_info/${symbol}/${period}`);
+
+  if (apiResponse.status !== 200) {
+    callback('FETCH_ERROR', undefined);
+    return;
+  }
+  const data = await apiResponse.json();
+  const arr = Object.keys(data).map(dateAsKey => {
+    return { date: dateAsKey, ...data[dateAsKey] };
+  });
+  callback(undefined, sliceByPeriod(arr, CHART_SIZE, PREDICT_SIZE));
+};
 
 export default {
-  fetchApiData,
+  fetchApiPrediction,
+  fetchApiTickerData,
   fetchTop,
 };

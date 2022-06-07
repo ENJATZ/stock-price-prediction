@@ -33,7 +33,7 @@ export const Loading = ({ step, showBar = false }: LoadingType) => {
         clearInterval(countInterval.current);
       }
     }
-  }, [loading]);
+  }, []);
 
   const aWidth = loaderValue.interpolate({
     inputRange: [0, 100],
@@ -47,7 +47,7 @@ export const Loading = ({ step, showBar = false }: LoadingType) => {
       <Block flex center style={{ paddingTop: 30 }}>
         <Spinner visible textStyle={{ color: 'white' }} />
         {showBar && (
-          <Block style={{ paddingTop: 450 }}>
+          <Block style={{ paddingTop: 350 }}>
             <ProgressBar aWidth={aWidth} />
           </Block>
         )}

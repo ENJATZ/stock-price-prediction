@@ -9,8 +9,10 @@ import theme from './utils/theme';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { StatusBar } from 'react-native';
 import { AppContextProvider } from './components/AppContextProvider/AppContextProvider';
+import { useTranslation } from 'react-i18next';
 
 const App = () => {
+  const { t } = useTranslation();
   const Tab = createBottomTabNavigator();
   return (
     <NavigationContainer>
@@ -29,7 +31,7 @@ const App = () => {
 
                   switch (route.name) {
                     case SCREEN.HOME:
-                      iconName = 'home';
+                      iconName = 'poll';
                       break;
                     case SCREEN.VIEWCHART:
                       iconName = 'chart-bar';
@@ -66,28 +68,28 @@ const App = () => {
                 name={SCREEN.HOME}
                 component={Screen.Home}
                 options={{
-                  title: 'Picks of the day',
+                  title: t('homeScreen.title'),
                 }}
               />
               <Tab.Screen
                 name={SCREEN.SEARCH}
                 component={Screen.Search}
                 options={{
-                  title: 'Search',
+                  title: t('searchScreen.title'),
                 }}
               />
               <Tab.Screen
                 name={SCREEN.VIEWCHART}
                 component={Screen.ViewChart}
                 options={{
-                  title: 'View Chart',
+                  title: t('viewChartScreen.title'),
                 }}
               />
               <Tab.Screen
                 name={SCREEN.FAVORITES}
                 component={Screen.Favorites}
                 options={{
-                  title: 'Favorites',
+                  title: t('favoriteScreen.title'),
                 }}
               />
             </Tab.Navigator>
