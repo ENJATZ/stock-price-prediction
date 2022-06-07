@@ -11,7 +11,7 @@ import sys
 import warnings
 import tensorflow as tf
 from func.forecast import forecast
-from func.gainers import get_top_gainers
+from func.gainers import get_top_gainers, get_top_losers
 import json
 import os
 
@@ -22,18 +22,29 @@ if not sys.warnoptions:
 sns.set()
 tf.compat.v1.set_random_seed(1234)
 
-yf.pdr_override()  # <== that's all it takes :-)
+yf.pdr_override()
 
 
 app = Flask(__name__)
 CORS(app)
 simulations = 3
 
-@app.route('/top10', methods=['GET'])
-def top10():
+@app.route('/top_gain', methods=['GET'])
+def top_gain():
     day_gainers = get_top_gainers();
-    print(day_gainers)
     return return_response(day_gainers, 200)
+
+@app.route('/top_lose', methods=['GET'])
+def top_lose():
+    day_losers = get_top_losers();
+    return return_response(day_losers, 200)
+    
+@app.route('/top', methods=['GET'])
+def top():
+    response = {}
+    response["gainers"] = get_top_gainers();
+    response["losers"] = get_top_losers();
+    return return_response(response, 200)
 
 @app.route('/tickr_info/<tickr>/<period>', methods=['GET'])
 def tickr_info(tickr, period):
@@ -53,8 +64,8 @@ def predict(tickr, period, test_size):
     df.to_csv('data.csv')
     df = pd.read_csv('data.csv')
     minmax = MinMaxScaler().fit(
-        df.iloc[:, 4:5].astype('float32'))  # Close index
-    df_log = minmax.transform(df.iloc[:, 4:5].astype('float32'))  # Close index
+        df.iloc[:, 4:5].astype('float32'))  
+    df_log = minmax.transform(df.iloc[:, 4:5].astype('float32')) 
     df_log = pd.DataFrame(df_log)
     # yf_data = df.to_json(orient='records', lines=True)
     yf_data = json.loads(json.dumps(list(df.T.to_dict().values())))

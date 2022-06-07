@@ -37,6 +37,9 @@ const App = () => {
                   case SCREEN.SEARCH:
                     iconName = 'search';
                     break;
+                  case SCREEN.FAVORITES:
+                    iconName = 'star';
+                    break;
                 }
 
                 return (
@@ -57,10 +60,36 @@ const App = () => {
                 height: 80,
               },
               tabBarLabelStyle: { marginBottom: -3, paddingTop: 0 },
+              tabBarShowLabel: false,
             })}>
-            <Tab.Screen name={SCREEN.HOME} component={Screen.Home} />
-            <Tab.Screen name={SCREEN.SEARCH} component={Screen.Search} />
-            <Tab.Screen name={SCREEN.VIEWCHART} component={Screen.ViewChart} />
+            <Tab.Screen
+              name={SCREEN.HOME}
+              component={Screen.Home}
+              options={{
+                title: 'Picks of the day',
+              }}
+            />
+            <Tab.Screen
+              name={SCREEN.SEARCH}
+              component={Screen.Search}
+              options={{
+                title: 'Search',
+              }}
+            />
+            <Tab.Screen
+              name={SCREEN.VIEWCHART}
+              component={Screen.ViewChart}
+              options={{
+                title: 'View Chart',
+              }}
+            />
+            <Tab.Screen
+              name={SCREEN.FAVORITES}
+              component={Screen.Home}
+              options={{
+                title: 'Favorites',
+              }}
+            />
           </Tab.Navigator>
         </Block>
       </GalioProvider>

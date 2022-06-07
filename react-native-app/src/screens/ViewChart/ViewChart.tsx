@@ -17,6 +17,7 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import * as S from './ViewChart.styles';
 import { Loading } from '../../components/Loading/Loading';
 import { useFocusEffect } from '@react-navigation/native';
+import apiService from '../../services/api.service';
 
 export const ViewChart = ({ route }: any) => {
   const symbol = route.params?.symbol;
@@ -141,7 +142,7 @@ export const ViewChart = ({ route }: any) => {
   const getPrediction = () => {
     setLoadingStep(5);
     setIsLoading(true);
-    yahooService.fetchApiData(symbol, (_, data) => {
+    apiService.fetchApiData(symbol, (_, data) => {
       console.log(
         '🚀 ~ file: ViewChart.tsx ~ line 148 ~ yahooService.fetchApiData ~ data',
         data,

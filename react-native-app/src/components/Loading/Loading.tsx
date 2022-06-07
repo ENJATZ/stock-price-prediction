@@ -6,7 +6,7 @@ import Spinner from 'react-native-loading-spinner-overlay';
 import { ProgressBar } from '../../components/ProgressBar/ProgressBar';
 import LinearGradient from 'react-native-linear-gradient';
 
-export const Loading = ({ step, showBar }) => {
+export const Loading = ({ step, showBar = false }: LoadingType) => {
   const loaderValue = useRef(new Animated.Value(0)).current;
   const countInterval = useRef<any>(null);
   const { height } = Dimensions.get('screen');
@@ -54,4 +54,9 @@ export const Loading = ({ step, showBar }) => {
       </Block>
     </LinearGradient>
   );
+};
+
+export type LoadingType = {
+  step: number;
+  showBar?: boolean;
 };

@@ -4,7 +4,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import theme from '../../utils/theme';
 
 export const RatingIndicator = styled(Block)`
-  margin-top: 10px;
+  margin-top: 30px;
   width: 90%;
 `;
 export const MainLine = styled(LinearGradient).attrs({
@@ -37,15 +37,18 @@ export const ValueIndicator = styled(Block)<IndicatorType>`
 `;
 export const CaretDown = styled(Block)<IndicatorType>`
   position: absolute;
-  bottom: 100%;
-  left: ${p => (typeof p.value === 'number' ? `${p.value * 20 + 2.5}%` : '0%')};
+  bottom: 120%;
+  left: ${p =>
+    typeof p.value === 'number'
+      ? `${p.value * 20.5 + (p.value.toString().length > 1 ? 1.7 : 0)}%`
+      : '0%'};
   background-color: transparent;
   width: 0;
   height: 0;
-  border-top-width: 8px;
-  border-right-width: 8px;
+  border-top-width: 6px;
+  border-right-width: 6px;
   border-bottom: 0;
-  border-left-width: 8px;
+  border-left-width: 6px;
   border-top-color: #badbdb;
   border-right-color: transparent;
   border-bottom-color: transparent;
