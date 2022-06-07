@@ -2,6 +2,7 @@ import { Block } from 'galio-framework';
 import React from 'react';
 import { TouchableWithoutFeedback } from 'react-native';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import theme from '../../utils/theme';
 import { Text } from '../Text/Text';
 import * as S from './ListItem.styles';
 
@@ -51,7 +52,7 @@ export const ListItem = ({
         <TouchableWithoutFeedback onPress={() => toggleFavorite(item.Symbol)}>
           <FontAwesome5
             name="star"
-            color={isFavorite ? 'yellow' : 'gray'}
+            color={isFavorite ? theme.COLORS.YELLOW : 'gray'}
             size={25}
             solid={isFavorite}
           />

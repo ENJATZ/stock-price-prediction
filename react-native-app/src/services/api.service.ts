@@ -1,5 +1,6 @@
 import { sliceByPeriod } from '../utils/slices';
 import { CHART_SIZE, PREDICT_SIZE, API_URL } from '../utils/definitions';
+import yahooFinance from 'yahoo-finance2';
 
 export const fetchTop = async (callback: (error: any, data: any) => void) => {
   const gainers = await fetch(`${API_URL}/top_gain`);
@@ -43,8 +44,9 @@ export const fetchApiTickerData = async (
 ) => {
   const period = '100d';
 
-  const apiResponse = await fetch(`${API_URL}/tickr_info/${symbol}/${period}`);
+  const yahooResponse = await yahooFinance.quote(symbol);
 
+  const apiResponse = await fetch(`${API_URL}/tickr_info/${symbol}/${period}`);
   if (apiResponse.status !== 200) {
     callback('FETCH_ERROR', undefined);
     return;
@@ -53,7 +55,11 @@ export const fetchApiTickerData = async (
   const arr = Object.keys(data).map(dateAsKey => {
     return { date: dateAsKey, ...data[dateAsKey] };
   });
-  callback(undefined, sliceByPeriod(arr, CHART_SIZE, PREDICT_SIZE));
+  console.log('🚀 ~ file: api.service.ts ~ line 63 ~ arr ~ arr', arr);
+  callback(undefined, {
+    summary: yahooResponse,
+    chart: arr.slice(arr.length - CHART_SIZE, arr.length),
+  });
 };
 
 export default {

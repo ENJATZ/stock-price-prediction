@@ -68,7 +68,7 @@ export const Favorites = ({ navigation }: any) => {
   if (isLoading) {
     return (
       <LinearGradient
-        colors={[theme.COLORS.DARK1, theme.COLORS.DARK1]}
+        colors={[theme.COLORS.DARK3, theme.COLORS.DARK3]}
         style={{ height: height }}>
         <Loading step={25} showBar={false} />
       </LinearGradient>
@@ -76,7 +76,7 @@ export const Favorites = ({ navigation }: any) => {
   }
   return (
     <LinearGradient
-      colors={[theme.COLORS.DARK1, theme.COLORS.DARK1]}
+      colors={[theme.COLORS.DARK3, theme.COLORS.DARK3]}
       style={{ height: height - 150 }}>
       <SafeAreaView>
         <ScrollView

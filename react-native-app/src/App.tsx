@@ -24,7 +24,20 @@ const App = () => {
               screenOptions={({ route }) => ({
                 headerTintColor: 'white',
                 headerStyle: {
+                  borderBottomWidth: 0,
                   backgroundColor: '#1E1E1E',
+                  shadowOffset: {
+                    width: 0,
+                    height: 12,
+                  },
+                  shadowOpacity: 0.02,
+                  shadowRadius: 16.0,
+                  shadowColor: 'white',
+                  elevation: 24,
+                  bottom: 0,
+                  padding: 10,
+                  width: '100%',
+                  zIndex: 0,
                 },
                 tabBarIcon: ({ focused, color, size }) => {
                   let iconName;
@@ -60,6 +73,18 @@ const App = () => {
                   backgroundColor: '#1E1E1E',
                   position: 'absolute',
                   height: 80,
+                  borderTopWidth: 0,
+                  shadowOffset: {
+                    width: 0,
+                    height: 12,
+                  },
+                  shadowOpacity: 0.58,
+                  shadowRadius: 16.0,
+                  elevation: 24,
+                  bottom: 0,
+                  padding: 10,
+                  width: '100%',
+                  zIndex: 0,
                 },
                 tabBarLabelStyle: { marginBottom: -3, paddingTop: 0 },
                 tabBarShowLabel: false,

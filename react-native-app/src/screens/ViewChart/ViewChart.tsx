@@ -40,9 +40,9 @@ export const ViewChart = ({ navigation, route }: any) => {
     let predictionDataset: any = [];
     let legend = [data?.summary?.symbol];
 
-    const OxLabels = data?.chart?.map((x: any) => {
-      const date = new Date(x.date);
-      return `${date.getDate()}`;
+    const OxLabels = data?.chart?.map((x: any, i: number) => {
+      const date = new Date(parseInt(x.date));
+      return i % 2 === 0 ? `${date.getDate()}` : '';
     });
     let realPrice = data?.chart?.map((x: any) => x.Close);
 
@@ -183,7 +183,7 @@ export const ViewChart = ({ navigation, route }: any) => {
   const getPrediction = () => {
     setLoadingStep(5);
     setIsLoading(true);
-    apiService.fetchApiData(symbol, (_, data) => {
+    apiService.fetchApiPrediction(symbol, (_, data) => {
       setIsLoading(false);
       setupTable(yfData, data, true);
     });
@@ -197,7 +197,7 @@ export const ViewChart = ({ navigation, route }: any) => {
   }
   return (
     <LinearGradient
-      colors={[theme.COLORS.DARK1, theme.COLORS.DARK1]}
+      colors={[theme.COLORS.DARK3, theme.COLORS.DARK3]}
       style={{ height: height }}>
       <ScrollView
         showsVerticalScrollIndicator={false}
@@ -214,7 +214,7 @@ export const ViewChart = ({ navigation, route }: any) => {
                 <TouchableWithoutFeedback onPress={() => toggleFavorite()}>
                   <FontAwesome5
                     name="star"
-                    color={isFavorite() ? 'yellow' : 'gray'}
+                    color={isFavorite() ? theme.COLORS.YELLOW : 'gray'}
                     size={25}
                     solid={isFavorite()}
                     style={{ marginRight: 3, marginTop: 5 }}
