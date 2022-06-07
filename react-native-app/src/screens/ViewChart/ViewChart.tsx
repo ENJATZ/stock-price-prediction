@@ -18,6 +18,7 @@ import * as S from './ViewChart.styles';
 import { Loading } from '../../components/Loading/Loading';
 import { useFocusEffect } from '@react-navigation/native';
 import apiService from '../../services/api.service';
+import { useAppContext } from '../../components/AppContextProvider/AppContextProvider';
 
 export const ViewChart = ({ route }: any) => {
   const symbol = route.params?.symbol;
@@ -26,6 +27,7 @@ export const ViewChart = ({ route }: any) => {
   const [yfData, setYfData] = useState<any>([]);
   const [chartData, setChartData] = useState({});
   const [loadingStep, setLoadingStep] = useState(20);
+  const { state: appState, dispatch } = useAppContext();
 
   const setupTable = (
     data: any,
@@ -74,10 +76,6 @@ export const ViewChart = ({ route }: any) => {
       ],
       legend,
     };
-    console.log(
-      '🚀 ~ file: ViewChart.tsx ~ line 81 ~ setupTable ~ _chartData',
-      _chartData,
-    );
     setChartData(_chartData);
   };
 
@@ -130,6 +128,12 @@ export const ViewChart = ({ route }: any) => {
     }, [symbol]),
   );
 
+  const toggleFavorite = () => {
+    dispatch({ type: 0, symbol });
+  };
+
+  const isFavorite = () => appState.favoriteList.indexOf(symbol) !== -1;
+
   if (isLoading || !chartData) {
     return (
       <LinearGradient
@@ -143,10 +147,6 @@ export const ViewChart = ({ route }: any) => {
     setLoadingStep(5);
     setIsLoading(true);
     apiService.fetchApiData(symbol, (_, data) => {
-      console.log(
-        '🚀 ~ file: ViewChart.tsx ~ line 148 ~ yahooService.fetchApiData ~ data',
-        data,
-      );
       setIsLoading(false);
       setupTable(yfData, data, true);
     });
@@ -167,12 +167,15 @@ export const ViewChart = ({ route }: any) => {
           <Block flex space="between" row>
             <Block>
               <Block flex row>
-                <FontAwesome5
-                  name="star"
-                  color="gray"
-                  size={25}
-                  style={{ marginRight: 3, marginTop: 5 }}
-                />
+                <TouchableWithoutFeedback onPress={() => toggleFavorite()}>
+                  <FontAwesome5
+                    name="star"
+                    color={isFavorite() ? 'yellow' : 'gray'}
+                    size={25}
+                    solid={isFavorite()}
+                    style={{ marginRight: 3, marginTop: 5 }}
+                  />
+                </TouchableWithoutFeedback>
                 <Text size="30" style={{ marginRight: 7 }}>
                   {yfData?.summary?.symbol}
                 </Text>

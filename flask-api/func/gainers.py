@@ -44,7 +44,7 @@ def get_top_gainers():
 
     return df.to_json(orient='records')
 
-def get_top_loers():
+def get_top_losers():
        
     html = requests.get("https://finance.yahoo.com/losers?offset=0&count=10").text
     tables = pd.read_html(html)  

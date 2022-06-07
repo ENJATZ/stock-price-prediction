@@ -1,65 +1,22 @@
 import { Block } from 'galio-framework';
 import React, { useState } from 'react';
 import { Text } from '../../components/Text/Text';
-import apiData from './data.json';
 import theme from '../../utils/theme';
-import {
-  Dimensions,
-  Image,
-  SafeAreaView,
-  ScrollView,
-  TouchableHighlight,
-} from 'react-native';
+import { Dimensions, Image, SafeAreaView, ScrollView } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import * as S from './Home.styles';
 import { SCREEN } from '../../utils/definitions';
 import { useFocusEffect } from '@react-navigation/native';
 import apiService from '../../services/api.service';
 import { Loading } from '../../components/Loading/Loading';
+import { useAppContext } from '../../components/AppContextProvider/AppContextProvider';
+import { ListItem } from '../../components/ListItem/ListItem';
 
-const ListItem = ({ item, trend }) => {
-  const color: string = trend === 'gain' ? '#3BB9FF' : '#fe6f87';
-
-  return (
-    <S.ListItem>
-      <Block style={{ width: '37%' }}>
-        <Text size="20">{item.Symbol}</Text>
-        <Text size="13" color="gray" numberOfLines={1}>
-          {item.Name}
-        </Text>
-      </Block>
-      <Block flex center style={{ width: '12%' }}>
-        <Text size="18">
-          ${parseFloat(item['Price (Intraday)']).toFixed(2)}
-        </Text>
-      </Block>
-      <Block flex row style={{ width: '23%' }}>
-        <FontAwesome5
-          name={trend === 'gain' ? 'arrow-up' : 'arrow-down'}
-          color={color}
-          size={25}
-          style={{ marginLeft: 15, marginTop: 3 }}
-        />
-        <Block flex style={{ marginLeft: 3 }}>
-          <Text color={color} size="13">
-            {parseFloat(item.Change).toFixed(2)}$
-          </Text>
-          <Text color={color} size="13">
-            {item['% Change']}%
-          </Text>
-        </Block>
-      </Block>
-      <Block right style={{ width: '10%' }}>
-        <FontAwesome5 name="star" color="gray" size={25} />
-      </Block>
-    </S.ListItem>
-  );
-};
 export const Home = ({ navigation }: any) => {
   const { height } = Dimensions.get('screen');
   const [data, setData] = useState<any>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const { state: appState, dispatch } = useAppContext();
 
   const sortArray = (array: any[]) =>
     array.sort((a, b) => a['% Change'] - b['% Change']).slice(0, 10);
@@ -83,6 +40,15 @@ export const Home = ({ navigation }: any) => {
     });
     navigation.navigate(SCREEN.VIEWCHART, { symbol });
   };
+
+  const toggleFavorite = (symbol: string) => {
+    dispatch({ type: 0, symbol });
+  };
+
+  const isFavorite = (symbol: string) => {
+    return appState.favoriteList.indexOf(symbol) !== -1;
+  };
+
   if (isLoading) {
     return (
       <LinearGradient
@@ -110,10 +76,13 @@ export const Home = ({ navigation }: any) => {
               </S.Title>
               <S.List>
                 {data.gainers.map((item: any) => (
-                  <TouchableHighlight
-                    onPress={() => navigateToChart(item.Symbol)}>
-                    <ListItem item={item} trend="gain" />
-                  </TouchableHighlight>
+                  <ListItem
+                    item={item}
+                    trend="gain"
+                    isFavorite={isFavorite(item.Symbol)}
+                    toggleFavorite={toggleFavorite}
+                    navigateToChart={navigateToChart}
+                  />
                 ))}
               </S.List>
             </Block>
@@ -126,10 +95,13 @@ export const Home = ({ navigation }: any) => {
               </S.Title>
               <S.List>
                 {data.losers.map((item: any) => (
-                  <TouchableHighlight
-                    onPress={() => navigateToChart(item.Symbol)}>
-                    <ListItem item={item} trend="lose" />
-                  </TouchableHighlight>
+                  <ListItem
+                    item={item}
+                    trend="lose"
+                    isFavorite={isFavorite(item.Symbol)}
+                    toggleFavorite={toggleFavorite}
+                    navigateToChart={navigateToChart}
+                  />
                 ))}
               </S.List>
             </Block>

@@ -32,7 +32,20 @@ export const fetchYahooData = async (
   }
 };
 
+export const fetchSymbols = async (
+  symbols: string[],
+  callback?: (error: any, data: any) => void,
+) => {
+  const data = await yahooFinance.quote(symbols);
+  if (callback) {
+    callback(undefined, data);
+  } else {
+    return data;
+  }
+};
+
 export default {
+  fetchSymbols,
   fetchYahooData,
   findSuggestions,
 };
