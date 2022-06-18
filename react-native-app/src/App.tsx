@@ -8,12 +8,18 @@ import { SCREEN } from './utils/definitions';
 import theme from './utils/theme';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { StatusBar } from 'react-native';
+import SplashScreen from 'react-native-splash-screen';
 import { AppContextProvider } from './components/AppContextProvider/AppContextProvider';
 import { useTranslation } from 'react-i18next';
 
 const App = () => {
   const { t } = useTranslation();
   const Tab = createBottomTabNavigator();
+
+  React.useEffect(() => {
+    SplashScreen.hide();
+  });
+
   return (
     <NavigationContainer>
       <StatusBar barStyle="light-content" />

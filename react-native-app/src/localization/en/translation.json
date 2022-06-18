@@ -18,7 +18,7 @@
     "volume": "Volume",
     "eps": "Earnings Per Share",
     "avgVolume": "Average Volume",
-    "earningsDate": "Earnings Date",
+    "earningsDate": "Earnings Date (DD/MM)",
     "analystRating": "Analyst Rating",
     "anlystIndicator": "Analyst Indicator",
     "buttonAnalyze": "Analyze",

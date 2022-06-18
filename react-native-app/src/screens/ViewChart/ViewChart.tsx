@@ -19,7 +19,7 @@ import { Loading } from '../../components/Loading/Loading';
 import { useFocusEffect } from '@react-navigation/native';
 import apiService from '../../services/api.service';
 import { useAppContext } from '../../components/AppContextProvider/AppContextProvider';
-import { SCREEN } from '../../utils/definitions';
+import { SCREEN, PREDICT_SIZE } from '../../utils/definitions';
 import { useTranslation } from 'react-i18next';
 
 export const ViewChart = ({ navigation, route }: any) => {
@@ -29,7 +29,7 @@ export const ViewChart = ({ navigation, route }: any) => {
   const [isLoading, setIsLoading] = useState(true);
   const [yfData, setYfData] = useState<any>([]);
   const [chartData, setChartData] = useState({});
-  const [loadingStep, setLoadingStep] = useState(20);
+  const [loadingStep, setLoadingStep] = useState(45);
   const { state: appState, dispatch } = useAppContext();
 
   const setupTable = (
@@ -40,13 +40,25 @@ export const ViewChart = ({ navigation, route }: any) => {
     let predictionDataset: any = [];
     let legend = [data?.summary?.symbol];
 
-    const OxLabels = data?.chart?.map((x: any, i: number) => {
+    let OxLabels = data?.chart?.map((x: any, i: number) => {
       const date = new Date(parseInt(x.date));
       return i % 2 === 0 ? `${date.getDate()}` : '';
     });
     let realPrice = data?.chart?.map((x: any) => x.Close);
 
     if (hasPrediction) {
+      let lastDayIndex = data.chart.length - 1;
+      let lastDate = new Date(parseInt(data?.chart[lastDayIndex].date));
+      if (lastDate) {
+        for (let i = 1; i <= PREDICT_SIZE; i++) {
+          OxLabels.shift();
+          OxLabels.shift();
+          lastDate.setDate(lastDate.getDate() + 1);
+          const day = ++lastDayIndex % 2 === 0 ? `${lastDate.getDate()}` : '';
+          OxLabels.push(day);
+        }
+      }
+
       const OyData = predictData.forecasts.map((forecast: any) =>
         forecast.map((x: any) => x.value),
       );
@@ -82,7 +94,7 @@ export const ViewChart = ({ navigation, route }: any) => {
     };
     setChartData(_chartData);
   };
-
+  const earningsDate = new Date(yfData?.summary?.earningsTimestamp);
   const summaries = [
     {
       name: t('viewChartScreen.previousClose'),
@@ -110,35 +122,13 @@ export const ViewChart = ({ navigation, route }: any) => {
     },
     {
       name: t('viewChartScreen.earningsDate'),
-      //value: new Date(yfData.earningsTimestampStart),
-      value: 1234,
+      value: `${earningsDate.getDate()}/${earningsDate.getMonth() + 1}`,
     },
     {
       name: t('viewChartScreen.analystRating'),
-      value: yfData?.summary?.averageAnalystRating,
+      value: parseFloat(yfData?.summary?.averageAnalystRating),
     },
   ];
-  // useFocusEffect(
-  //   React.useCallback(() => {
-  //     console.log(
-  //       '🚀 ~ file: ViewChart.tsx ~ line 121 ~ React.useCallback ~ !route.params?.symbol',
-  //       route.params?.symbol,
-  //     );
-  //     if (!route.params?.symbol || typeof route.params?.symbol !== 'string') {
-  //       navigation.navigate(SCREEN.SEARCH);
-  //     } else {
-  //       setIsLoading(true);
-  //       setLoadingStep(20);
-  //       setYfData([]);
-
-  //       yahooService.fetchYahooData(symbol, (_, data) => {
-  //         setYfData(data);
-  //         setupTable(data);
-  //         setIsLoading(false);
-  //       });
-  //     }
-  //   }, [symbol, navigation, route]),
-  // );
 
   useEffect(() => {
     if (!route.params?.symbol || typeof route.params?.symbol !== 'string') {
@@ -147,7 +137,7 @@ export const ViewChart = ({ navigation, route }: any) => {
       }
     } else {
       setIsLoading(true);
-      setLoadingStep(20);
+      setLoadingStep(5);
       setYfData([]);
 
       apiService.fetchApiTickerData(route.params?.symbol, (_, data) => {
@@ -181,7 +171,7 @@ export const ViewChart = ({ navigation, route }: any) => {
     );
   }
   const getPrediction = () => {
-    setLoadingStep(5);
+    setLoadingStep(1);
     setIsLoading(true);
     apiService.fetchApiPrediction(symbol, (_, data) => {
       setIsLoading(false);
