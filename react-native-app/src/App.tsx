@@ -11,7 +11,9 @@ import { StatusBar } from 'react-native';
 import SplashScreen from 'react-native-splash-screen';
 import { AppContextProvider } from './components/AppContextProvider/AppContextProvider';
 import { useTranslation } from 'react-i18next';
+import { LogBox } from 'react-native';
 
+LogBox.ignoreAllLogs();
 const App = () => {
   const { t } = useTranslation();
   const Tab = createBottomTabNavigator();

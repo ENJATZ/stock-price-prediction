@@ -49,7 +49,6 @@ def top():
 @app.route('/tickr_info/<tickr>/<period>', methods=['GET'])
 def tickr_info(tickr, period):
     df = pdr.get_data_yahoo(tickr, period=period, interval="1d")
-    print(df)
     yf_data = df.to_json(orient = 'index')
     return return_response(yf_data, 200)
 
@@ -63,11 +62,9 @@ def predict(tickr, period, test_size):
     df = pdr.get_data_yahoo(tickr, period=period, interval="1d")
     df.to_csv('data.csv')
     df = pd.read_csv('data.csv')
-    minmax = MinMaxScaler().fit(
-        df.iloc[:, 4:5].astype('float32'))  
+    minmax = MinMaxScaler().fit(df.iloc[:, 4:5].astype('float32'))  # pret LOW si normalizare date
     df_log = minmax.transform(df.iloc[:, 4:5].astype('float32')) 
     df_log = pd.DataFrame(df_log)
-    # yf_data = df.to_json(orient='records', lines=True)
     yf_data = json.loads(json.dumps(list(df.T.to_dict().values())))
 
     all_forecasts = []
