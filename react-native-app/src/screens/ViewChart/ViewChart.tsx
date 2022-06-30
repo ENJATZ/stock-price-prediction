@@ -274,14 +274,14 @@ export const ViewChart = ({ navigation, route }: any) => {
               borderRadius: 5,
             }}
           />
-          <Block flex center fluid width="100%">
+          <Block flex center fluid style={{ width: '100%' }}>
             <TouchableWithoutFeedback onPress={() => getPrediction()}>
               <S.AnalyzeButton>
                 <Text>{t('viewChartScreen.buttonAnalyze')}</Text>
               </S.AnalyzeButton>
             </TouchableWithoutFeedback>
           </Block>
-          <Block>
+          <Block style={{ width: '100%' }}>
             <S.InfoBlock>
               <Text size="18" style={{ marginBottom: 10 }}>
                 {t('viewChartScreen.summary')}
@@ -290,7 +290,7 @@ export const ViewChart = ({ navigation, route }: any) => {
                 flex
                 row
                 space="between"
-                style={{ width: '100%', flexWrap: true }}>
+                style={{ width: '100%', flexWrap: 'wrap' }}>
                 {summaries.map((item: InlineSummaryType) => (
                   <InlineSummary name={item.name} value={item.value} />
                 ))}

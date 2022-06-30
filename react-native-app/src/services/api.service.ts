@@ -55,7 +55,6 @@ export const fetchApiTickerData = async (
   const arr = Object.keys(data).map(dateAsKey => {
     return { date: dateAsKey, ...data[dateAsKey] };
   });
-  console.log('🚀 ~ file: api.service.ts ~ line 63 ~ arr ~ arr', arr);
   callback(undefined, {
     summary: yahooResponse,
     chart: arr.slice(arr.length - CHART_SIZE, arr.length),
