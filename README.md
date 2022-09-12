@@ -38,7 +38,7 @@ or
 npm run android
 ```
 ## Screenshots
-![Search Screen](https://github.com/ENJATZ/stock-price-prediction/blob/main/screenshots/6.jpeg?raw=true "https://github.com/ENJATZ/stock-price-prediction/blob/main/screenshots/6.jpeg?raw=true"| width=100)
+![Search Screen](https://github.com/ENJATZ/stock-price-prediction/blob/main/screenshots/6.jpeg?raw=true | width=100)
 ![Favorite Screen](https://github.com/ENJATZ/stock-price-prediction/blob/main/screenshots/7.jpeg?raw=true "https://github.com/ENJATZ/stock-price-prediction/blob/main/screenshots/7.jpeg?raw=true"| width=100)
 ![Trending Screen](https://github.com/ENJATZ/stock-price-prediction/blob/main/screenshots/5.jpeg?raw=true "https://github.com/ENJATZ/stock-price-prediction/blob/main/screenshots/6.jpeg?raw=true"| width=100)
 ![NIO Analysis](https://github.com/ENJATZ/stock-price-prediction/blob/main/screenshots/1.jpeg?raw=true "https://github.com/ENJATZ/stock-price-prediction/blob/main/screenshots/1.jpeg?raw=true"| width=100)
