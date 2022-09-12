@@ -38,12 +38,12 @@ or
 npm run android
 ```
 ## Screenshots
-![Search Screen](https://github.com/ENJATZ/stock-price-prediction/blob/main/screenshots/6.jpeg?raw=true "https://github.com/ENJATZ/stock-price-prediction/blob/main/screenshots/6.jpeg?raw=true")
-![Favorite Screen](https://github.com/ENJATZ/stock-price-prediction/blob/main/screenshots/7.jpeg?raw=true "https://github.com/ENJATZ/stock-price-prediction/blob/main/screenshots/7.jpeg?raw=true")
-![Trending Screen](https://github.com/ENJATZ/stock-price-prediction/blob/main/screenshots/5.jpeg?raw=true "https://github.com/ENJATZ/stock-price-prediction/blob/main/screenshots/6.jpeg?raw=true")
-![NIO Analysis](https://github.com/ENJATZ/stock-price-prediction/blob/main/screenshots/1.jpeg?raw=true "https://github.com/ENJATZ/stock-price-prediction/blob/main/screenshots/1.jpeg?raw=true")
-![AAPL Analysis](https://github.com/ENJATZ/stock-price-prediction/blob/main/screenshots/2.jpeg?raw=true "https://github.com/ENJATZ/stock-price-prediction/blob/main/screenshots/2.jpeg?raw=true")
-![MSFT Analysis](https://github.com/ENJATZ/stock-price-prediction/blob/main/screenshots/3.jpeg?raw=true "https://github.com/ENJATZ/stock-price-prediction/blob/main/screenshots/3.jpeg?raw=true")
+![Search Screen](https://github.com/ENJATZ/stock-price-prediction/blob/main/screenshots/6.jpeg?raw=true "https://github.com/ENJATZ/stock-price-prediction/blob/main/screenshots/6.jpeg?raw=true"| width=100)
+![Favorite Screen](https://github.com/ENJATZ/stock-price-prediction/blob/main/screenshots/7.jpeg?raw=true "https://github.com/ENJATZ/stock-price-prediction/blob/main/screenshots/7.jpeg?raw=true"| width=100)
+![Trending Screen](https://github.com/ENJATZ/stock-price-prediction/blob/main/screenshots/5.jpeg?raw=true "https://github.com/ENJATZ/stock-price-prediction/blob/main/screenshots/6.jpeg?raw=true"| width=100)
+![NIO Analysis](https://github.com/ENJATZ/stock-price-prediction/blob/main/screenshots/1.jpeg?raw=true "https://github.com/ENJATZ/stock-price-prediction/blob/main/screenshots/1.jpeg?raw=true"| width=100)
+![AAPL Analysis](https://github.com/ENJATZ/stock-price-prediction/blob/main/screenshots/2.jpeg?raw=true "https://github.com/ENJATZ/stock-price-prediction/blob/main/screenshots/2.jpeg?raw=true"| width=100)
+![MSFT Analysis](https://github.com/ENJATZ/stock-price-prediction/blob/main/screenshots/3.jpeg?raw=true "https://github.com/ENJATZ/stock-price-prediction/blob/main/screenshots/3.jpeg?raw=true" | width=100)
 
 ## License
 MIT License
