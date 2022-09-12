@@ -38,12 +38,11 @@ or
 npm run android
 ```
 ## Screenshots
-![Search Screen](https://github.com/ENJATZ/stock-price-prediction/blob/main/screenshots/6.jpeg?raw=true | width=100)
-![Favorite Screen](https://github.com/ENJATZ/stock-price-prediction/blob/main/screenshots/7.jpeg?raw=true "https://github.com/ENJATZ/stock-price-prediction/blob/main/screenshots/7.jpeg?raw=true"| width=100)
-![Trending Screen](https://github.com/ENJATZ/stock-price-prediction/blob/main/screenshots/5.jpeg?raw=true "https://github.com/ENJATZ/stock-price-prediction/blob/main/screenshots/6.jpeg?raw=true"| width=100)
-![NIO Analysis](https://github.com/ENJATZ/stock-price-prediction/blob/main/screenshots/1.jpeg?raw=true "https://github.com/ENJATZ/stock-price-prediction/blob/main/screenshots/1.jpeg?raw=true"| width=100)
-![AAPL Analysis](https://github.com/ENJATZ/stock-price-prediction/blob/main/screenshots/2.jpeg?raw=true "https://github.com/ENJATZ/stock-price-prediction/blob/main/screenshots/2.jpeg?raw=true"| width=100)
-![MSFT Analysis](https://github.com/ENJATZ/stock-price-prediction/blob/main/screenshots/3.jpeg?raw=true "https://github.com/ENJATZ/stock-price-prediction/blob/main/screenshots/3.jpeg?raw=true" | width=100)
+Search Screen              |  Favorites Screen         |  Trending Screen
+:-------------------------:|:-------------------------:|:-------------------------:
+<img src="https://github.com/ENJATZ/stock-price-prediction/blob/main/screenshots/6.jpeg?raw=true" width="300"> | <img src="https://github.com/ENJATZ/stock-price-prediction/blob/main/screenshots/7.jpeg?raw=true" width="300"> | <img src="https://github.com/ENJATZ/stock-price-prediction/blob/main/screenshots/5.jpeg?raw=true" width="300">
+NIO Analysis               |  AAPL Analysis            |  MSFT Analysis
+<img src="https://github.com/ENJATZ/stock-price-prediction/blob/main/screenshots/1.jpeg?raw=true" width="300"> | <img src="https://github.com/ENJATZ/stock-price-prediction/blob/main/screenshots/2.jpeg?raw=true" width="300"> | <img src="https://github.com/ENJATZ/stock-price-prediction/blob/main/screenshots/3.jpeg?raw=true" width="300">
 
 ## License
 MIT License
